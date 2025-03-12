@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,34 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Drive Video Player</title>
     <style>
-        body {
+        html, body {
             margin: 0;
             padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #000;
         }
-
         .video-container {
             width: 100%;
-            max-width: 800px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
-
         iframe {
             width: 100%;
-            height: 600px;
+            height: 100vh;
             border: none;
+            display: block;
         }
     </style>
 </head>
 <body>
     <div class="video-container">
-        <iframe id="drive-video" loading="eager" allow="autoplay; fullscreen"></iframe>
+        <iframe id="drive-video" loading="eager" allowfullscreen allow="autoplay; fullscreen"></iframe>
     </div>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const iframe = document.getElementById("drive-video");
