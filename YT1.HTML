@@ -3,44 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Drive Video Player</title>
+    <title>Fullscreen YouTube Player</title>
     <style>
         html, body {
             margin: 0;
             padding: 0;
-            height: 100%;
             width: 100%;
+            height: 100%;
             overflow: hidden;
         }
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #000;
-        }
-        .video-container {
-            width: 100%;
-            height: 100%;
-            position: absolute;
+
+        #player {
+            position: fixed;
             top: 0;
             left: 0;
-        }
-        iframe {
-            width: 100%;
+            width: 100vw;
             height: 100vh;
             border: none;
-            display: block;
+            background: #000;
         }
     </style>
 </head>
 <body>
-    <div class="video-container">
-        <iframe id="drive-video" loading="eager" allowfullscreen allow="autoplay; fullscreen"></iframe>
-    </div>
+    <div id="player"></div>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const iframe = document.getElementById("drive-video");
-            iframe.src = "https://drive.google.com/file/d/1DUW1aUmVihchsdMvejLXJTjAeY5WIPzN/preview";
+        // Load YouTube IFrame API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                videoId: 'o-0YkDGrAbk',
+                playerVars: {
+                    'autoplay': 1,
+                    'rel': 0,
+                    'modestbranding': 1,
+                    'controls': 1,
+                    'loop': 1,
+                    'playlist': 'o-0YkDGrAbk',
+                    'fs': 1, // Enable fullscreen button
+                    'enablejsapi': 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Optional: Auto-start playback
+            event.target.playVideo();
+        }
+
+        function onPlayerStateChange(event) {
+            // Restart video when it ends
+            if (event.data === YT.PlayerState.ENDED) {
+                player.seekTo(0);
+                player.playVideo();
+            }
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            player.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
 </body>
